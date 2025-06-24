@@ -1,0 +1,62 @@
+---
+title: "New York Census Data"
+author: "Ali Ahmad"
+format: html
+execute: 
+  echo: false
+---
+
+```{r}
+#| echo: false
+#| message: false
+library(tidyverse)
+
+nyc_data <- read.csv(file = "nyc_tracts.csv")
+
+```
+
+
+```{r}
+#| echo: false
+#| message: false
+
+# Create the data frame
+df <- tribble(
+  ~tract, ~race, ~med_income,
+  "Census Tract 1.01; Queens County; New York", "White", 124885,
+  "Census Tract 1.02; Queens County; New York", "White", 213750,
+  "Census Tract 1.04; Queens County; New York", "Black", NA,
+  "Census Tract 10.01; New York County; New York", "White", 109352,
+  "Census Tract 10.02; New York County; New York", "Hispanic", 23658,
+  "Census Tract 1004; Kings County; New York", "Black", 83872,
+  "Census Tract 1006; Kings County; New York", "Black", 106250,
+  "Census Tract 1008.01; Queens County; New York", "Black", 140521,
+  "Census Tract 1008.03; Queens County; New York", "Black", 47271,
+  "Census Tract 1008.04; Queens County; New York", "Black", 118220,
+  "Census Tract 1008; Kings County; New York", "Black", 89191,
+  "Census Tract 100; Kings County; New York", "Hispanic", 64107,
+  "Census Tract 100; New York County; New York", "White", 103417,
+  "Census Tract 100; Queens County; New York", "Asian", 112390,
+  "Census Tract 1010.02; Queens County; New York", "White", 53222,
+  "Census Tract 1010.03; Queens County; New York", "Hispanic", 68707,
+  "Census Tract 1010.04; Queens County; New York", "Black", 41429,
+  "Census Tract 1010; Kings County; New York", "Black", 62330,
+  "Census Tract 1012; Kings County; New York", "Black", 89773
+)
+
+# Clean and plot
+df %>%
+  filter(!is.na(med_income)) %>%
+  ggplot(aes(x = race, y = med_income, fill = race)) +
+  geom_boxplot(width = 0.6, outlier.shape = NA, alpha = 0.8, color = "black") +
+  geom_jitter(width = 0.15, size = 2, alpha = 0.7) +
+  scale_y_continuous(labels = scales::dollar_format()) +
+  labs(
+    title = "Median Income Distribution by Race in NYC Census Tracts",
+    x = NULL,
+    y = "Median Income (USD)"
+  ) +
+  theme_minimal(base_size = 14) +
+  theme(legend.position = "none")
+
+```
